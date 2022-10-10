@@ -6,6 +6,11 @@ case "$1" in
 	sh)
 		docker run --rm -it -v "$(realpath files)":/opt/commondir $image bash
 		;;
+	nodisplay)
+		docker run \
+			-v "$(realpath files)":/opt/rootfiles \
+			--rm -it $image root --web=off
+		;;
 	*)
 		docker run \
 			-e DISPLAY=$DISPLAY \

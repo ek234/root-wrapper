@@ -8,6 +8,11 @@ To enter root inside the docker container, run
 ./communicate
 ```
 
+To enter root without connecting to the display, run
+```sh
+./communicate nodisplay
+```
+
 To enter the shell in the docker container, run
 ```sh
 ./communicate sh
