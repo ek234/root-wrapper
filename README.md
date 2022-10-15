@@ -1,5 +1,9 @@
 ## Wrapper for ROOT Data Analysis Framework's Docker Image
 
+# Dependencies
+
+You will need docker for this. Install it using your package manager.
+
 # Execution
 Start the docker daemon and clone this repo
 
