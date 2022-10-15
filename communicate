@@ -3,6 +3,20 @@ image="rootproject/root"
 
 case "$1" in
 
+	delphes)
+		case "$2" in
+			build)
+				docker build --rm -t delphes delphes
+				;;
+			sh)
+				docker run --rm -it delphes sh
+				;;
+			*)
+				docker run --rm -it delphes
+				;;
+		esac
+		;;
+
 	sh)
 		docker run --rm -it -v "$(realpath files)":/opt/commondir $image bash
 		;;
