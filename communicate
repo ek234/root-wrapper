@@ -1,38 +1,27 @@
 #!/bin/sh
-image="rootproject/root"
+
+service="ppanalyzer"
 
 case "$1" in
 
-	delphes)
-		case "$2" in
-			build)
-				docker build --rm -t delphes delphes
-				;;
-			sh)
-				docker run --rm -it delphes sh
-				;;
-			*)
-				docker run --rm -it delphes
-				;;
-		esac
+	build)
+		docker-compose build
 		;;
 
 	sh)
-		docker run --rm -it -v "$(realpath files)":/opt/commondir $image bash
+		docker-compose run --rm $service sh
 		;;
 
 	nodisplay)
-		docker run \
-			-v "$(realpath files)":/opt/rootfiles \
-			--rm -it $image root --web=off
+		docker-compose run \
+			--rm $service root --web=off
 		;;
 
 	*)
-		docker run \
+		docker-compose run \
 			-e DISPLAY=$DISPLAY \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			-v "$(realpath files)":/opt/rootfiles \
-			--rm -it $image root --web=off
+			--rm $service root --web=off
 		;;
 
 esac

@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  ppanalyzer:
+    build:
+      context: .
+    volumes:
+      - ./files:/opt/shared
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
