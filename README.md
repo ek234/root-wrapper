@@ -1,4 +1,4 @@
-## Wrapper for ROOT Data Analysis Framework's Docker Image
+## Wrapper for madgraph5
 
 # Dependencies
 
@@ -7,19 +7,24 @@ You will need docker for this. Install it using your package manager.
 # Execution
 Start the docker daemon and clone this repo
 
-To enter root inside the docker container, run
+To build madgraph
 ```sh
-./communicate
+./wradg build
 ```
 
-To enter root without connecting to the display, run
+To enter mg5_aMC, run:
 ```sh
-./communicate nodisplay
+./wradg
+```
+
+To enter mg5_aMC without connecting to the display, run
+```sh
+./wradg nodisplay
 ```
 
 To enter the shell in the docker container, run
 ```sh
-./communicate sh
+./wradg sh
 ```
 
 # Graphics
