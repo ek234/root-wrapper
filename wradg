@@ -2,10 +2,13 @@
 
 img="mg_wrapper"
 
+if [ -z "$(docker images -q $img 2>/dev/null)" ] || [ "$1" == "build" ]; then
+    docker build -t $img .
+fi
+
 case "$1" in
 
    build)
-       docker build -t $img .
        ;;
 
 	sh)
