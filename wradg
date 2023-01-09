@@ -11,22 +11,22 @@ case "$1" in
    build)
        ;;
 
-	sh)
-		docker run --rm -it -v "$(realpath files)":/opt/shared $img bash
-		;;
+    sh)
+        docker run --rm -it -v "$(realpath files)":/opt/shared $img bash
+        ;;
 
-	nodisplay)
-		docker run \
-			-v "$(realpath files)":/opt/shared \
-			--rm -it $img mg5
-		;;
+    nodisplay)
+        docker run \
+            -v "$(realpath files)":/opt/shared \
+            --rm -it $img mg5
+        ;;
 
-	*)
-		docker run \
-			-e DISPLAY=$DISPLAY \
-			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			-v "$(realpath files)":/opt/shared \
-			--rm -it $img mg5
-		;;
+    *)
+        docker run \
+            -e DISPLAY=$DISPLAY \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -v "$(realpath files)":/opt/shared \
+            --rm -it $img mg5
+        ;;
 
 esac
