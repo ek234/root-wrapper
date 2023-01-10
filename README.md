@@ -17,11 +17,6 @@ To enter mg5_aMC, run:
 ./wradg
 ```
 
-To enter mg5_aMC without connecting to the display, run
-```sh
-./wradg nodisplay
-```
-
 To enter the shell in the docker container, run
 ```sh
 ./wradg sh

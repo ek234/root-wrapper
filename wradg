@@ -1,46 +1,54 @@
 #!/bin/sh
 
 img="mg_wrapper"
+cont="madg"
 
 if [ -z "$(docker images -q $img 2>/dev/null)" ] || [ "$1" == "build" ]; then
-    docker build -t $img .
+    docker build -t "$img" .
 fi
+if [ "$1" == "build" ]; then
+    exit
+fi
+
+function run_cont {
+    # if container with this name exits
+    if docker container inspect "$cont" &>/dev/null ; then
+        # if the container is running
+        if [ "$(docker container inspect -f '{{.State.Status}}' "$cont")" == "running" ]; then
+            # dont disturb it
+            echo "container already running"
+            return
+        else
+            # otherwise, remove it
+                echo "removing container"
+                docker rm "$cont" >/dev/null
+            # TODO: handle cases like 'exited', 'paused', etc separately
+        fi
+    fi
+
+    echo "container started running"
+    docker run \
+        --name "$cont" \
+        --gpus all \
+        --device /dev/nvidia0:/dev/nvidia0 \
+        --device /dev/nvidiactl:/dev/nvidiactl \
+        --device /dev/nvidia-modeset:/dev/nvidia-modeset \
+        -e DISPLAY=$DISPLAY \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v "$(realpath files)":/opt/shared \
+        -t -d "$img"
+}
 
 case "$1" in
 
-   build)
-       ;;
-
     sh)
-        docker run \
-            --gpus all \
-            --device /dev/nvidia0:/dev/nvidia0 \
-            --device /dev/nvidiactl:/dev/nvidiactl \
-            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
-            -v "$(realpath files)":/opt/shared \
-            --rm -it $img bash
-        ;;
-
-    nodisplay)
-        docker run \
-            --gpus all \
-            --device /dev/nvidia0:/dev/nvidia0 \
-            --device /dev/nvidiactl:/dev/nvidiactl \
-            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
-            -v "$(realpath files)":/opt/shared \
-            --rm -it $img mg5
+        run_cont
+        docker exec -it "$cont" bash
         ;;
 
     *)
-        docker run \
-            --gpus all \
-            --device /dev/nvidia0:/dev/nvidia0 \
-            --device /dev/nvidiactl:/dev/nvidiactl \
-            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v "$(realpath files)":/opt/shared \
-            --rm -it $img mg5
+        run_cont
+        docker exec -it "$cont" mg5
         ;;
 
 esac
