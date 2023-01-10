@@ -12,17 +12,31 @@ case "$1" in
        ;;
 
     sh)
-        docker run --rm -it -v "$(realpath files)":/opt/shared $img bash
+        docker run \
+            --gpus all \
+            --device /dev/nvidia0:/dev/nvidia0 \
+            --device /dev/nvidiactl:/dev/nvidiactl \
+            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
+            -v "$(realpath files)":/opt/shared \
+            --rm -it $img bash
         ;;
 
     nodisplay)
         docker run \
+            --gpus all \
+            --device /dev/nvidia0:/dev/nvidia0 \
+            --device /dev/nvidiactl:/dev/nvidiactl \
+            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
             -v "$(realpath files)":/opt/shared \
             --rm -it $img mg5
         ;;
 
     *)
         docker run \
+            --gpus all \
+            --device /dev/nvidia0:/dev/nvidia0 \
+            --device /dev/nvidiactl:/dev/nvidiactl \
+            --device /dev/nvidia-modeset:/dev/nvidia-modeset \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v "$(realpath files)":/opt/shared \
